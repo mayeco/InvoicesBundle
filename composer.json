@@ -1,0 +1,26 @@
+{
+    "name": "mayeco/invoices-bundle",
+    "license": "MIT",
+    "type": "symfony-bundle",
+    "description": "Invoices for Symfony2",
+    "keywords": ["invoices"],
+    "homepage": "https://github.com/mayeco/InvoicesBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mario Young",
+            "email": "yo@maye.co"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0"
+    },
+    "autoload": {
+        "psr-4": { "Mayeco\\InvoicesBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
