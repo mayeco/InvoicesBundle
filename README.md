@@ -1,6 +1,8 @@
 InvoicesBundle
 ==============
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/bec57f8e-361e-4d37-9047-70dfef2e6abc/big.png)](https://insight.sensiolabs.com/projects/bec57f8e-361e-4d37-9047-70dfef2e6abc)
+
 `THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
