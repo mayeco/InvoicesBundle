@@ -1,0 +1,14 @@
+services:
+    mayeco_invoices.invoicehelper:
+        class: Mayeco\InvoicesBundle\Services\InvoiceHelper
+        arguments: ["@doctrine.orm.entity_manager"]
+    mayeco_invoices.eventsubscriber.recurring:
+        class: Mayeco\InvoicesBundle\EventSubscriber\RecurringSubscriber
+        arguments: ["@mayeco_invoices.invoicehelper", "@logger", "@doctrine.orm.entity_manager"]
+        tags:
+            - { name: kernel.event_subscriber }
+    mayeco_invoices.eventsubscriber.invoices:
+        class: Mayeco\InvoicesBundle\EventSubscriber\InvoicesSubscriber
+        arguments: ["@mayeco_invoices.invoicehelper", "@logger", "@doctrine.orm.entity_manager"]
+        tags:
+            - { name: kernel.event_subscriber }
