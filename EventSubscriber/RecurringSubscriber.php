@@ -100,7 +100,7 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
         ));
     }
 
-    private function UpdateRecurringOrder(NotificationEvent $event, $order_status = null)
+    private function updateRecurringOrder(NotificationEvent $event, $order_status = null)
     {
 
         $notification = $event->getNotification();
@@ -144,7 +144,7 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
     {
         $notification = $event->getNotification();
 
-        $this->UpdateRecurringOrder($event, "fail");
+        $this->updateRecurringOrder($event, "fail");
 
         $this->logger->info('RecurringSubscriber::onRecurringInstallmentFailed', array(
             'ORDEN_ID' => $notification->getSaleId()
@@ -155,7 +155,7 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
     {
         $notification = $event->getNotification();
 
-        $this->UpdateRecurringOrder($event);
+        $this->updateRecurringOrder($event);
 
         $this->logger->info('RecurringSubscriber::onRecurringStopped', array(
             'ORDEN_ID' => $notification->getSaleId()
@@ -166,7 +166,7 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
     {
         $notification = $event->getNotification();
 
-        $this->UpdateRecurringOrder($event);
+        $this->updateRecurringOrder($event);
 
         $this->logger->info('RecurringSubscriber::onRecurringComplete', array(
             'ORDEN_ID' => $notification->getSaleId()
@@ -178,7 +178,7 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
 
         $notification = $event->getNotification();
 
-        $this->UpdateRecurringOrder($event);
+        $this->updateRecurringOrder($event);
 
         $this->logger->info('RecurringSubscriber::onRecurringRestarted', array(
             'ORDEN_ID' => $notification->getSaleId()
