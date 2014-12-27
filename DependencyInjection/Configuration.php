@@ -18,7 +18,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('mayeco_invoices');
+        $treeBuilder->root('mayeco_invoices');
 
         return $treeBuilder;
     }
