@@ -4,9 +4,7 @@ namespace Mayeco\InvoicesBundle\Services;
 
 use Mayeco\InvoicesBundle\Entity\Invoice;
 use Mayeco\InvoicesBundle\Entity\Order;
-
 use Doctrine\ORM\EntityManager;
-
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class InvoiceHelper
@@ -77,8 +75,8 @@ class InvoiceHelper
     public function getOrCreateOrder($order_id, $user_id, $create = true)
     {
 
-        if (!is_numeric($order_id) || !is_numeric($user_id)) {
-            throw \InvalidArgumentException("order_id not numeric");
+        if (!is_numeric($order_id)) {
+            throw \InvalidArgumentException("order_id is not numeric");
         }
 
         $repository = $this->em->getRepository("MayecoInvoicesBundle:Order");
@@ -89,6 +87,10 @@ class InvoiceHelper
         );
 
         if ($create && !$order) {
+
+            if (!is_numeric($user_id)) {
+                throw \InvalidArgumentException("user_id is not numeric");
+            }
 
             $order = new Order();
             $order->setSaleDateUpdated(new \DateTime());
@@ -108,7 +110,6 @@ class InvoiceHelper
             }
 
             $order->setUser($user);
-
             $this->em->beginTransaction();
             try {
 
