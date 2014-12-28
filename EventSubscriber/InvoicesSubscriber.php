@@ -49,7 +49,8 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
     {
         $response = $event->getResponse();
 
-        while (true) {
+        $execute = true;
+        while ($execute) {
 
             $invoice = $this->invoices->getOrCreateInvoice($response->getInvoiceId(), $response->getOrderNumber(), $response->getMerchantOrderId());
             $this->isEmOpenOrCreateNew();
@@ -59,11 +60,9 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
                 $invoice = $this->mergeAndLock($invoice);
                 $invoice->setInvoiceUsdAmount($response->getTotal());
                 $invoice->setInvoiceUpdate(new \DateTime());
-                if (!$this->save($invoice)) {
-                    continue;
+                if ($this->save($invoice)) {
+                    $execute = false;
                 }
-
-                break;
 
             } catch (OptimisticLockException $e) {
 
@@ -75,7 +74,8 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
 
         if ("Y" != $response->getCreditCardProcessed()) {
 
-            while (true) {
+            $execute = true;
+            while ($execute) {
 
                 $order = $this->invoices->getOrCreateOrder($response->getOrderNumber(), $response->getMerchantOrderId());
                 $this->isEmOpenOrCreateNew();
@@ -85,11 +85,9 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
                     $order = $this->mergeAndLock($order);
                     $order->setCreditCardProcessed($response->getCreditCardProcessed());
                     $order->setSaleDateUpdated(new \DateTime());
-                    if (!$this->save($order)) {
-                        continue;
+                    if ($this->save($order)) {
+                        $execute = false;
                     }
-
-                    break;
 
                 } catch (OptimisticLockException $e) {
 
@@ -110,7 +108,8 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
     {
         $notification = $event->getNotification();
 
-        while (true) {
+        $execute = true;
+        while ($execute) {
 
             $invoice = $this->invoices->getOrCreateInvoice($notification->getInvoiceId(), $notification->getSaleId(), $notification->getVendorOrderId());
             $this->isEmOpenOrCreateNew();
@@ -123,11 +122,9 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
                 $invoice->setFraudStatus($notification->getFraudStatus());
                 $invoice->setInvoiceStatus($notification->getInvoiceStatus());
                 $invoice->setInvoiceUpdate(new \DateTime());
-                if (!$this->save($invoice)) {
-                    continue;
+                if ($this->save($invoice)) {
+                    $execute = false;
                 }
-
-                break;
 
             } catch (OptimisticLockException $e) {
 
@@ -137,7 +134,8 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
 
         }
 
-        while (true) {
+        $execute = true;
+        while ($execute) {
 
             $order = $this->invoices->getOrCreateOrder($notification->getSaleId(), $notification->getVendorOrderId());
             $this->isEmOpenOrCreateNew();
@@ -155,11 +153,9 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
                 $order->setRecurringStatus($notification->getItemRecStatus1());
                 $order->setRecurringOrder($notification->getItemRecurrence1());
                 $order->setSaleDateUpdated(new \DateTime());
-                if (!$this->save($order)) {
-                    continue;
+                if ($this->save($order)) {
+                    $execute = false;
                 }
-
-                break;
 
             } catch (OptimisticLockException $e) {
 
@@ -179,7 +175,8 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
     {
         $notification = $event->getNotification();
 
-        while (true) {
+        $execute = true;
+        while ($execute) {
 
             $invoice = $this->invoices->getOrCreateInvoice($notification->getInvoiceId(), $notification->getSaleId(), $notification->getVendorOrderId());
             if ("pass" == $invoice->getFraudStatus()) {
@@ -193,11 +190,9 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
                 $invoice = $this->mergeAndLock($invoice);
                 $invoice->setFraudStatus($notification->getFraudStatus());
                 $invoice->setInvoiceUpdate(new \DateTime());
-                if (!$this->save($invoice)) {
-                    continue;
+                if ($this->save($invoice)) {
+                    $execute = false;
                 }
-
-                break;
 
             } catch (OptimisticLockException $e) {
 
@@ -209,7 +204,8 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
 
         if ("fail" == $notification->getFraudStatus()) {
 
-            while (true) {
+            $execute = true;
+            while ($execute) {
 
                 $order = $this->invoices->getOrCreateOrder($notification->getSaleId(), $notification->getVendorOrderId());
                 $this->isEmOpenOrCreateNew();
@@ -220,11 +216,9 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
                     $order->setRecurringStatus("cancelled");
                     $order->setRecurringStatusMail("zero");
                     $order->setSaleDateUpdated(new \DateTime());
-                    if (!$this->save($order)) {
-                        continue;
+                    if ($this->save($order)) {
+                        $execute = false;
                     }
-
-                    break;
 
                 } catch (OptimisticLockException $e) {
 
@@ -246,7 +240,8 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
     {
         $notification = $event->getNotification();
 
-        while (true) {
+        $execute = true;
+        while ($execute) {
 
             $invoice = $this->invoices->getOrCreateInvoice($notification->getInvoiceId(), $notification->getSaleId(), $notification->getVendorOrderId());
             $this->isEmOpenOrCreateNew();
@@ -259,11 +254,9 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
                 $invoice->setInvoiceUsdAmount($notification->getInvoiceUsdAmount());
                 $invoice->setPaymentType($notification->getPaymentType());
                 $invoice->setInvoiceUpdate(new \DateTime());
-                if (!$this->save($invoice)) {
-                    continue;
+                if ($this->save($invoice)) {
+                    $execute = false;;
                 }
-
-                break;
 
             } catch (OptimisticLockException $e) {
 
@@ -273,7 +266,8 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
 
         }
 
-        while (true) {
+        $execute = true;
+        while ($execute) {
 
             $order = $this->invoices->getOrCreateOrder($notification->getSaleId(), $notification->getVendorOrderId());
             $this->isEmOpenOrCreateNew();
@@ -291,11 +285,9 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
                 }
 
                 $order->setSaleDateUpdated(new \DateTime());
-                if (!$this->save($order)) {
-                    continue;
+                if ($this->save($order)) {
+                    $execute = false;
                 }
-
-                break;
 
             } catch (OptimisticLockException $e) {
 
@@ -314,7 +306,8 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
     {
         $notification = $event->getNotification();
 
-        while (true) {
+        $execute = true;
+        while ($execute) {
 
             $invoice = $this->invoices->getOrCreateInvoice($notification->getInvoiceId(), $notification->getSaleId(), $notification->getVendorOrderId());
             $this->isEmOpenOrCreateNew();
@@ -326,11 +319,9 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
                 $invoice->setInvoiceStatusMail("zero");
                 $invoice->setInvoiceStatus("refund");
                 $invoice->setInvoiceUpdate(new \DateTime());
-                if (!$this->save($invoice)) {
-                    continue;
+                if ($this->save($invoice)) {
+                    $execute = false;
                 }
-
-                break;
 
             } catch (OptimisticLockException $e) {
 
