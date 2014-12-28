@@ -49,7 +49,8 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
 
         $notification = $event->getNotification();
 
-        while (true) {
+        $execute = true;
+        while ($execute) {
 
             $invoice = $this->invoices->getOrCreateInvoice($notification->getInvoiceId(), $notification->getSaleId(), $notification->getVendorOrderId());
             $this->isEmOpenOrCreateNew();
@@ -69,11 +70,9 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
                     $invoice->setInvoiceStatus("pending");
                 }
 
-                if (!$this->save($invoice)) {
-                    continue;
+                if ($this->save($invoice)) {
+                    $execute = false;
                 }
-
-                break;
 
             } catch (OptimisticLockException $e) {
 
@@ -83,7 +82,8 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
 
         }
 
-        while (true) {
+        $execute = true;
+        while ($execute) {
 
             $order = $this->invoices->getOrCreateOrder($notification->getSaleId(), $notification->getVendorOrderId());
             $this->isEmOpenOrCreateNew();
@@ -96,11 +96,9 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
                 $order->setRecurringStatus($notification->getItemRecStatus1());
                 $order->setRecurringStatusMail("zero");
 
-                if (!$this->save($invoice)) {
-                    continue;
+                if ($this->save($invoice)) {
+                    $execute = false;
                 }
-
-                break;
 
             } catch (OptimisticLockException $e) {
 
@@ -120,7 +118,8 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
 
         $notification = $event->getNotification();
 
-        while (true) {
+        $execute = true;
+        while ($execute) {
 
             $order = $this->invoices->getOrCreateOrder($notification->getSaleId(), $notification->getVendorOrderId());
             $this->isEmOpenOrCreateNew();
@@ -137,11 +136,9 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
                     $order->setRecurringStatus($order_status);
                 }
 
-                if (!$this->save($order)) {
-                    continue;
+                if ($this->save($order)) {
+                    $execute = false;
                 }
-
-                break;
 
             } catch (OptimisticLockException $e) {
 
