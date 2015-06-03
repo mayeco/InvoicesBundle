@@ -52,7 +52,12 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
         $execute = true;
         while ($execute) {
 
-            $invoice = $this->invoices->getOrCreateInvoice($notification->getInvoiceId(), $notification->getSaleId(), $notification->getVendorOrderId());
+            try {
+                $invoice = $this->invoices->getOrCreateInvoice($notification->getInvoiceId(), $notification->getSaleId(), $notification->getVendorOrderId());
+            } catch (\Exception $e) {
+                return;
+            }
+            
             $this->isEmOpenOrCreateNew();
             $this->em->beginTransaction();
             try {
@@ -85,7 +90,12 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
         $execute = true;
         while ($execute) {
 
-            $order = $this->invoices->getOrCreateOrder($notification->getSaleId(), $notification->getVendorOrderId());
+            try {
+                $order = $this->invoices->getOrCreateOrder($notification->getSaleId(), $notification->getVendorOrderId());
+            } catch (\Exception $e) {
+                return;
+            }
+
             $this->isEmOpenOrCreateNew();
             $this->em->beginTransaction();
             try {
@@ -121,7 +131,12 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
         $execute = true;
         while ($execute) {
 
-            $order = $this->invoices->getOrCreateOrder($notification->getSaleId(), $notification->getVendorOrderId());
+            try {
+                $order = $this->invoices->getOrCreateOrder($notification->getSaleId(), $notification->getVendorOrderId());
+            } catch (\Exception $e) {
+                return;
+            }
+
             $this->isEmOpenOrCreateNew();
             $this->em->beginTransaction();
             try {
@@ -155,9 +170,7 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
     public function onRecurringInstallmentFailed(NotificationEvent $event)
     {
         $notification = $event->getNotification();
-
         $this->updateRecurringOrder($event, "fail");
-
         $this->logger->info('RecurringSubscriber::onRecurringInstallmentFailed', array(
             'ORDEN_ID' => $notification->getSaleId()
         ));
@@ -166,9 +179,7 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
     public function onRecurringStopped(NotificationEvent $event)
     {
         $notification = $event->getNotification();
-
         $this->updateRecurringOrder($event);
-
         $this->logger->info('RecurringSubscriber::onRecurringStopped', array(
             'ORDEN_ID' => $notification->getSaleId()
         ));
@@ -177,9 +188,7 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
     public function onRecurringComplete(NotificationEvent $event)
     {
         $notification = $event->getNotification();
-
         $this->updateRecurringOrder($event);
-
         $this->logger->info('RecurringSubscriber::onRecurringComplete', array(
             'ORDEN_ID' => $notification->getSaleId()
         ));
@@ -187,11 +196,8 @@ class RecurringSubscriber extends SubscriberHelper implements EventSubscriberInt
 
     public function onRecurringRestarted(NotificationEvent $event)
     {
-
         $notification = $event->getNotification();
-
         $this->updateRecurringOrder($event);
-
         $this->logger->info('RecurringSubscriber::onRecurringRestarted', array(
             'ORDEN_ID' => $notification->getSaleId()
         ));
