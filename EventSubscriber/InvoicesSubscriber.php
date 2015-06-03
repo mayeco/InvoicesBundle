@@ -52,7 +52,12 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
         $execute = true;
         while ($execute) {
 
-            $invoice = $this->invoices->getOrCreateInvoice($response->getInvoiceId(), $response->getOrderNumber(), $response->getMerchantOrderId());
+            try {
+                $invoice = $this->invoices->getOrCreateInvoice($response->getInvoiceId(), $response->getOrderNumber(), $response->getMerchantOrderId());
+            } catch (\Exception $e) {
+                return;
+            }
+
             $this->isEmOpenOrCreateNew();
             $this->em->beginTransaction();
             try {
@@ -77,7 +82,12 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
             $execute = true;
             while ($execute) {
 
-                $order = $this->invoices->getOrCreateOrder($response->getOrderNumber(), $response->getMerchantOrderId());
+                try {
+                    $order = $this->invoices->getOrCreateOrder($response->getOrderNumber(), $response->getMerchantOrderId());
+                } catch (\Exception $e) {
+                    return;
+                }
+                
                 $this->isEmOpenOrCreateNew();
                 $this->em->beginTransaction();
                 try {
@@ -111,7 +121,12 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
         $execute = true;
         while ($execute) {
 
-            $invoice = $this->invoices->getOrCreateInvoice($notification->getInvoiceId(), $notification->getSaleId(), $notification->getVendorOrderId());
+            try {
+                $invoice = $this->invoices->getOrCreateInvoice($notification->getInvoiceId(), $notification->getSaleId(), $notification->getVendorOrderId());
+            } catch (\Exception $e) {
+                return;
+            }
+
             $this->isEmOpenOrCreateNew();
             $this->em->beginTransaction();
             try {
@@ -137,7 +152,12 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
         $execute = true;
         while ($execute) {
 
-            $order = $this->invoices->getOrCreateOrder($notification->getSaleId(), $notification->getVendorOrderId());
+            try {
+                $order = $this->invoices->getOrCreateOrder($notification->getSaleId(), $notification->getVendorOrderId());
+            } catch (\Exception $e) {
+                return;
+            }
+
             $this->isEmOpenOrCreateNew();
             $this->em->beginTransaction();
             try {
@@ -178,7 +198,12 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
         $execute = true;
         while ($execute) {
 
-            $invoice = $this->invoices->getOrCreateInvoice($notification->getInvoiceId(), $notification->getSaleId(), $notification->getVendorOrderId());
+            try {
+                $invoice = $this->invoices->getOrCreateInvoice($notification->getInvoiceId(), $notification->getSaleId(), $notification->getVendorOrderId());
+            } catch (\Exception $e) {
+                return;
+            }
+
             if ("pass" == $invoice->getFraudStatus()) {
                 return;
             }
@@ -207,7 +232,12 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
             $execute = true;
             while ($execute) {
 
-                $order = $this->invoices->getOrCreateOrder($notification->getSaleId(), $notification->getVendorOrderId());
+                try {
+                    $order = $this->invoices->getOrCreateOrder($notification->getSaleId(), $notification->getVendorOrderId());
+                } catch (\Exception $e) {
+                    return;
+                }
+
                 $this->isEmOpenOrCreateNew();
                 $this->em->beginTransaction();
                 try {
@@ -243,7 +273,12 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
         $execute = true;
         while ($execute) {
 
-            $invoice = $this->invoices->getOrCreateInvoice($notification->getInvoiceId(), $notification->getSaleId(), $notification->getVendorOrderId());
+            try {
+                $invoice = $this->invoices->getOrCreateInvoice($notification->getInvoiceId(), $notification->getSaleId(), $notification->getVendorOrderId());
+            } catch (\Exception $e) {
+                return;
+            }
+
             $this->isEmOpenOrCreateNew();
             $this->em->beginTransaction();
             try {
@@ -269,7 +304,12 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
         $execute = true;
         while ($execute) {
 
-            $order = $this->invoices->getOrCreateOrder($notification->getSaleId(), $notification->getVendorOrderId());
+            try {
+                $order = $this->invoices->getOrCreateOrder($notification->getSaleId(), $notification->getVendorOrderId());
+            } catch (\Exception $e) {
+                return;
+            }
+
             $this->isEmOpenOrCreateNew();
             $this->em->beginTransaction();
             try {
@@ -309,7 +349,12 @@ class InvoicesSubscriber extends SubscriberHelper implements EventSubscriberInte
         $execute = true;
         while ($execute) {
 
-            $invoice = $this->invoices->getOrCreateInvoice($notification->getInvoiceId(), $notification->getSaleId(), $notification->getVendorOrderId());
+            try {
+                $invoice = $this->invoices->getOrCreateInvoice($notification->getInvoiceId(), $notification->getSaleId(), $notification->getVendorOrderId());
+            } catch (\Exception $e) {
+                return;
+            }
+
             $this->isEmOpenOrCreateNew();
             $this->em->beginTransaction();
             try {
